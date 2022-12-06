@@ -2,8 +2,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include "get_next_line.h"
-#include "structs.h"
-#include "libft/libft.h"
+#include "libft.h"
 
 void	printstacks(char **stacks)
 {
