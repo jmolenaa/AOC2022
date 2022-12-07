@@ -4,35 +4,38 @@
 #include "get_next_line.h"
 #include "libft.h"
 
-int	sizedir(char *str, int fd, int neededspace, int *spacetoremove)
+/*	This function gets the line in the file where the
+	corresponding directory starts	*/
+void	getdir(char *str, int fd)
 {
-	int		size;
-	int		file;
 	char	dirname[20];
 	int		n;
-	char	*dirline;
-	char	*cddirline;
-	off_t	temp;
 	int		check = 0;
 
+	/* Making string with directory name*/
 	sscanf(str, "dir %s", dirname);
 	n = ft_strlen(dirname);
 	*(dirname + n) = '\n';
 	*(dirname + n + 1) = '\0';
-	dirline = ft_strjoin("dir ", dirname);
-	cddirline = ft_strjoin("$ cd ", dirname);
-	size = 0;
 	while (1)
 	{
 		str = get_next_line(fd);
 		if (*str == 'd')
 		{
-			if (ft_strncmp(str, dirline, 20) == 0)
+			/*	This checks if we have another dir with
+				the same namesomewhere between the
+				our dir and the contents of that dir*/
+			if (ft_strncmp(str + 4, dirname, n) == 0)
 				check = 1;
 		}
 		if (*(str + 2) == 'c')
 		{
-			if (ft_strncmp(str + 5, dirname, n + 1) == 0)
+			/*	This checks if we are at the cd dirname
+				in the file which is where the contents
+				of our dir are shown, if we had another
+				dir declaration before that we skip over
+				this instance*/
+			if (ft_strncmp(str + 5, dirname, n) == 0)
 			{
 				if (check)
 					check = 0;
@@ -41,7 +44,17 @@ int	sizedir(char *str, int fd, int neededspace, int *spacetoremove)
 			}
 		}
 	}
+	/*Skipping over "$ ls" command*/
 	get_next_line(fd);
+}
+
+int	sizedir(char *str, int fd, int neededspace, int *spacetoremove)
+{
+	int		size;
+	off_t	temp;
+
+	size = 0;
+	getdir(str, fd);
 	while (1)
 	{
 		str = get_next_line(fd);
@@ -54,15 +67,12 @@ int	sizedir(char *str, int fd, int neededspace, int *spacetoremove)
 			lseek(fd, temp, SEEK_SET);
 		}
 		else
-		{
-			sscanf(str, "%d ", &file);
-			size = size + file;
-		}
+			size = size + ft_atoi(str);
 	}
+	/*	changes what size we're removing depending
+		on counted size*/
 	if (size > neededspace && size < *spacetoremove)
 		*spacetoremove = size;
-	*(dirname + n) = '\0';
-	// printf("dir : %s has %d bytes\n", dirname, size);
 	return (size);
 }
 
@@ -71,7 +81,6 @@ int	main()
 	char *str;
 	int fd = open("input", O_RDONLY);
 	int	size;
-	int	file;
 	int	neededspace = 30000000 - 24650017;
 	printf("%d\n", neededspace);
 	int	spacetoremove = 45349983;
@@ -86,18 +95,17 @@ int	main()
 			break ;
 		if (*str == 'd')
 		{
+			/*	adds dir size to totalsize by calling
+				recursively, stores where we are in 
+				the file and later sets us back to that 
+				point*/
 			temp = lseek(fd, 0, SEEK_CUR);
 			size = size + sizedir(str, fd, neededspace, &spacetoremove);
 			lseek(fd, temp, SEEK_SET);
 		}
 		else
-		{
-			sscanf(str, "%d ", &file);
-			size = size + file;
-		}
+			/* adds filesize to totalsize*/
+			size = size + ft_atoi(str);
 	}
 	printf("%d\n", spacetoremove);
-	
-	// printf("dir : \\ has %d bytes\n", size);
-	// printf("total : %d", total);
 }
