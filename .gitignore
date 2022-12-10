@@ -2,4 +2,5 @@ a.out
 test*
 file
 */libft
-*/a.out.dSYM/Contents
+*/a.out.dSYM
+.vscode
