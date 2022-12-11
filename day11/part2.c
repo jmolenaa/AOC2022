@@ -22,7 +22,6 @@ void	changeworry(t_monkey *currentmonkey)
 		else
 			new_worry = new_worry * currentmonkey->howmuch;
 	}
-	new_worry = new_worry / 3;
 	currentmonkey->itemlist->worrylevel = new_worry;
 }
 
@@ -33,7 +32,10 @@ int	check_condition(t_monkey *currentmonkey)
 	temp = currentmonkey->itemlist->worrylevel / currentmonkey->test;
 	temp = temp * currentmonkey->test;
 	if (temp == currentmonkey->itemlist->worrylevel)
+	{
+		currentmonkey->itemlist->worrylevel = currentmonkey->itemlist->worrylevel / currentmonkey->test;
 		return (1);
+	}
 	else
 		return (0);
 }
@@ -84,7 +86,7 @@ void	start_throwing(t_monkey *firstmonkey)
 {
 	t_monkey	*currentmonkey;
 
-	for (int i = 1; i < 21; i++)
+	for (int i = 1; i < 10000; i++)
 	{
 		currentmonkey = firstmonkey;
 		while (currentmonkey != NULL)

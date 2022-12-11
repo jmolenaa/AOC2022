@@ -64,7 +64,7 @@ void	get_operation(int fd, t_monkey *new_monkey)
 	if (c == 'o')
 		new_monkey->howmuch = -1;
 	else
-		sscanf(str, " %*s %*s %*s %*s %*c %d", &new_monkey->howmuch);
+		sscanf(str, " %*s %*s %*s %*s %*c %lld", &new_monkey->howmuch);
 }
 
 t_monkey	*make_new_monkey(int fd)
@@ -76,7 +76,7 @@ t_monkey	*make_new_monkey(int fd)
 	sscanf(get_next_line(fd), "%*s %d", &new_monkey->monkeynumber);
 	make_item_list(fd, new_monkey);
 	get_operation(fd, new_monkey);
-	sscanf(get_next_line(fd), " %*s %*s %*s %d", &new_monkey->test);
+	sscanf(get_next_line(fd), " %*s %*s %*s %lld", &new_monkey->test);
 	sscanf(get_next_line(fd), " %*s %*s %*s %*s %*s %d", &new_monkey->monkeytrue);
 	sscanf(get_next_line(fd), " %*s %*s %*s %*s %*s %d", &new_monkey->monkeyfalse);
 	new_monkey->nextmonkey = NULL;

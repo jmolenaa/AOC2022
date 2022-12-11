@@ -9,7 +9,7 @@ void	printitemlist(t_item *head)
 {
 	while (head != NULL)
 	{
-		printf(", %d", head->worrylevel);
+		printf("%lld, ", head->worrylevel);
 		head = head->nextitem;
 	}
 	printf("\n");
@@ -20,14 +20,25 @@ void	print_monkeys(t_monkey *head)
 	while(head != NULL)
 	{
 		printf("Monkey %d\n", head->monkeynumber);
-		printf("Holds items : %d", head->itemlist->worrylevel);
-		printitemlist(head->itemlist->nextitem);
+		printf("Holds items : ");
+		printitemlist(head->itemlist);
 		printf("Operation = old %c", head->operation);
 		if (head->howmuch == -1)
 			printf(" old\n");
 		else
-			printf(" %d\n", head->howmuch);
-		printf("Test : %d\nIf true : to monkey %d\nIf false : to monkey %d\n\n", head->test, head->monkeytrue, head->monkeyfalse);
+			printf(" %lld\n", head->howmuch);
+		printf("Test : %lld\nIf true : to monkey %d\nIf false : to monkey %d\n", head->test, head->monkeytrue, head->monkeyfalse);
+		printf("Counter : %d\n\n", head->counter);
+		head = head->nextmonkey;
+	}
+}
+
+void	print_monkey_items(t_monkey *head)
+{
+	while(head != NULL)
+	{
+		printf("Monkey %d holds items : ", head->monkeynumber);
+		printitemlist(head->itemlist);
 		head = head->nextmonkey;
 	}
 }
