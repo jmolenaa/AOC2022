@@ -5,7 +5,7 @@
 #include "libft.h"
 #include "day11.h"
 
-void	changeworry(t_monkey *currentmonkey)
+void	changeworry(t_monkey *currentmonkey, int modulo)
 {
 	long long int	new_worry = currentmonkey->itemlist->worrylevel;
 	if (currentmonkey->operation == '+')
@@ -22,6 +22,7 @@ void	changeworry(t_monkey *currentmonkey)
 		else
 			new_worry = new_worry * currentmonkey->howmuch;
 	}
+	new_worry = new_worry % modulo;
 	currentmonkey->itemlist->worrylevel = new_worry;
 }
 
@@ -32,10 +33,7 @@ int	check_condition(t_monkey *currentmonkey)
 	temp = currentmonkey->itemlist->worrylevel / currentmonkey->test;
 	temp = temp * currentmonkey->test;
 	if (temp == currentmonkey->itemlist->worrylevel)
-	{
-		currentmonkey->itemlist->worrylevel = currentmonkey->itemlist->worrylevel / currentmonkey->test;
 		return (1);
-	}
 	else
 		return (0);
 }
@@ -65,13 +63,13 @@ t_item	*throw_to_monkey(t_monkey *currentmonkey, int monkey, t_monkey *firstmonk
 	return (nextitem);
 }
 
-void	throw_items(t_monkey *currentmonkey, t_monkey *firstmonkey)
+void	throw_items(t_monkey *currentmonkey, t_monkey *firstmonkey, int modulo)
 {
 	int	newworry;
 
 	while (currentmonkey->itemlist != NULL)
 	{
-		changeworry(currentmonkey);
+		changeworry(currentmonkey, modulo);
 		// printf("%d\n", currentmonkey->itemlist->worrylevel);
 		// printf("%d\n", check_condition(currentmonkey));
 		if (check_condition(currentmonkey))
@@ -82,16 +80,30 @@ void	throw_items(t_monkey *currentmonkey, t_monkey *firstmonkey)
 	}
 }
 
+int	getmodulo(t_monkey *firstmonkey)
+{
+	int	modulo = 1;
+
+	while (firstmonkey != NULL)
+	{
+		modulo = modulo * firstmonkey->test;
+		firstmonkey = firstmonkey->nextmonkey;
+	}
+	return (modulo);
+}
+
 void	start_throwing(t_monkey *firstmonkey)
 {
 	t_monkey	*currentmonkey;
+	int			modulo = getmodulo(firstmonkey);
 
-	for (int i = 1; i < 10000; i++)
+	// printf("modulo : %d\n", modulo);
+	for (int i = 1; i < 10001; i++)
 	{
 		currentmonkey = firstmonkey;
 		while (currentmonkey != NULL)
 		{
-			throw_items(currentmonkey, firstmonkey);
+			throw_items(currentmonkey, firstmonkey, modulo);
 			currentmonkey = currentmonkey->nextmonkey;
 		}
 		// printf("%d :\n", i);
@@ -101,8 +113,8 @@ void	start_throwing(t_monkey *firstmonkey)
 
 void	get_count(t_monkey *firstmonkey)
 {
-	int	max1 = 0;
-	int	max2 = 0;
+	long int	max1 = 0;
+	long int	max2 = 0;
 
 	while (firstmonkey != NULL)
 	{
@@ -116,7 +128,7 @@ void	get_count(t_monkey *firstmonkey)
 		firstmonkey = firstmonkey->nextmonkey;
 	}
 	// printf("%d, %d\n", max1, max2);
-	printf("%d\n", max1 * max2);
+	printf("%ld\n", max1 * max2);
 }
 
 
@@ -126,5 +138,5 @@ int	main()
 	firstmonkey = parseinput();
 	start_throwing(firstmonkey);
 	get_count(firstmonkey);
-	print_monkeys(firstmonkey);
+	// print_monkeys(firstmonkey);
 }
