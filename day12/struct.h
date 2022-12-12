@@ -10,4 +10,12 @@ typedef struct s_grid
 	int		end[2];
 }			t_grid;
 
+typedef struct s_store
+{
+	int		y;
+	int		x;
+	int		steps;
+	struct	s_store *next;
+}			t_store;
+
 #endif

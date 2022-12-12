@@ -145,7 +145,7 @@ int	travel(t_grid grid, int j, int i)
 		{
 			j = temp->y;
 			i = temp->x;
-			if (j == *grid.start && i == *(grid.start + 1))
+			if (*(*(grid.elev + j) + i) == 'a')
 				return (steps);
 			make_new_locations(grid, j, i, steps + 1, end_loc);
 			temp = temp->next;
