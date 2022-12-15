@@ -5,37 +5,11 @@
 #include "libft.h"
 #include "structs.h"
 
-t_coordinates *make_new(char x, char y)
+void	add_to_string(int x, int y, char c, char *str_row_we_look_for)
 {
-	t_coordinates *new;
-
-	new = malloc(sizeof(t_coordinates));
-	new->x = x;
-	new->y = y;
-	new->next = NULL;
-	return (new);
-}
-
-void	add_front_coordinate(t_coordinates **head, t_coordinates *new)
-{
-	new->next = *head;
-	*head = new;
-}
-
-void	check_if_in_list_and_add(t_coordinates **head, int x, int y)
-{
-	t_coordinates	*new;
-	t_coordinates	*temp;
-
-	temp = *head;
-	while (temp != NULL)
-	{
-		if (x == temp->x)
-			return ;
-		temp = temp->next;
-	}
-	new = make_new(x, y);
-	add_front_coordinate(head, new);
+	x = x + 1000000;
+	if (*(str_row_we_look_for + x) != 'B')
+		*(str_row_we_look_for + x) = c;
 }
 
 t_sensor	get_distance_and_position(char *str)
@@ -44,56 +18,50 @@ t_sensor	get_distance_and_position(char *str)
 	sscanf(str, "%*s %*s x=%d, y=%d: %*s %*s %*s %*s x=%d, y=%d",\
 	&sensor.sensorx, &sensor.sensory, &sensor.beaconx, &sensor.beacony);
 	sensor.distance = abs(sensor.sensorx - sensor.beaconx) + abs(sensor.sensory - sensor.beacony);
-	// printf("\nsensor:\n%d, %d\n%d %d\n%d\n", sensor.sensorx, sensor.sensory, sensor.beaconx, sensor.beacony, sensor.distance);
 	return (sensor);
 }
 
-void	check_positions_and_add_to_list(t_coordinates **head, t_sensor sensor)
+void	check_positions_and_add_to_string(t_sensor sensor, char *str_row_we_look_for)
 {
-	int				row_to_check = 10;
-	t_coordinates	*new;
+	int				row_to_check = 2000000;
 	int				distance_sensor_row = abs(sensor.sensory - row_to_check);
 
-	while (distance_sensor_row >= sensor.distance)
+	while (distance_sensor_row <= sensor.distance)
 	{
 		if (distance_sensor_row - sensor.distance == 0)
 		{
-			check_if_in_list_and_add(head, sensor.sensorx, row_to_check);
-			// new = make_new(sensor.sensorx, row_to_check);
-			// add_front_coordinate(head, new);
+			add_to_string(sensor.sensorx, row_to_check, '#', str_row_we_look_for);
 		}
 		else
 		{
-			check_if_in_list_and_add(head, sensor.sensorx - distance_sensor_row, row_to_check);
-			// new = make_new(sensor.sensorx - distance_sensor_row, row_to_check);
-			// add_front_coordinate(head, new);
-			check_if_in_list_and_add(head, sensor.sensory + distance_sensor_row, row_to_check);
-			// new = make_new(sensor.sensory + distance_sensor_row, row_to_check);
-			// add_front_coordinate(head, new);
+			add_to_string(sensor.sensorx - (sensor.distance - distance_sensor_row), row_to_check, '#', str_row_we_look_for);
+			add_to_string(sensor.sensorx + (sensor.distance - distance_sensor_row), row_to_check, '#', str_row_we_look_for);
 		}
-		distance_sensor_row--;
+		distance_sensor_row++;
 	}
 }
 
-void	printlist(t_coordinates *head)
+void	count_pounds(char *str_row_we_look_for)
 {
-	int	i;
+	int	i = 0;
+	int	j = 0;
 
-	while (head != (NULL))
+	while (*(str_row_we_look_for + i) != '\0')
 	{
-		printf("%d, %d\n", head->x, head->y);
-		head = head->next;
+		if (*(str_row_we_look_for + i) == '#')
+			j++;
 		i++;
 	}
-	printf("%d\n", i);
+	printf("%d\n", j);
 }
 
 int	main()
 {
-	int				fd = open("test", O_RDONLY);
+	int				fd = open("input", O_RDONLY);
 	char			*str;
 	t_sensor		sensor;
-	t_coordinates	*head = NULL;
+	char			*str_row_we_look_for = (char *)ft_calloc(20000001, sizeof(char));
+	ft_memset(str_row_we_look_for, '.', 20000000);
 
 	while (1)
 	{
@@ -101,7 +69,9 @@ int	main()
 		if (str == NULL)
 			break ;
 		sensor = get_distance_and_position(str);
-		check_positions_and_add_to_list(&head, sensor);
-		printlist(head);
+		if (sensor.beacony == 2000000)
+			add_to_string(sensor.beaconx, sensor.beacony, 'B', str_row_we_look_for);
+		check_positions_and_add_to_string(sensor, str_row_we_look_for);
 	}
+	count_pounds(str_row_we_look_for);
 }
