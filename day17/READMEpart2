@@ -1,0 +1,62 @@
+This is not very nice, but it was late and couldn't think of anything else
+
+
+
+run code for a while, till diff 50 f.e., copy output to check file
+identify where diffs start repeating (first time where all diffs are the same as the ones after diff 1)
+set a "/" after the diff that is teh same as diff 1. 
+run getanswerpart2.c and libft.a to egt answer.
+example :
+																	
+0 : 1561156, diff
+1 : 1561180, diff 
+2 : 1561198, diff
+3 : 1561162, diff
+4 : 1561153, diff
+5 : 1561188, diff
+6 : 1561196, diff
+7 : 1561185, diff
+8 : 1561151, diff
+9 : 1561178, diff
+10 : 1561182, diff
+11 : 1561187, diff
+12 : 1561170, diff
+13 : 1561159, diff
+14 : 1561182, diff
+15 : 1561189, diff
+16 : 1561170, diff
+17 : 1561170, diff 
+18 : 1561180, diff /
+19 : 1561198, diff
+20 : 1561162, diff
+21 : 1561153, diff
+22 : 1561188, diff
+23 : 1561196, diff
+24 : 1561185, diff
+25 : 1561151, diff
+26 : 1561178, diff
+27 : 1561182, diff
+28 : 1561187, diff
+29 : 1561170, diff
+30 : 1561159, diff
+31 : 1561182, diff
+32 : 1561189, diff
+33 : 1561170, diff
+34 : 1561170, diff
+35 : 1561180, diff
+36 : 1561198, diff
+37 : 1561162, diff
+38 : 1561153, diff
+39 : 1561188, diff
+40 : 1561196, diff
+41 : 1561185, diff
+42 : 1561151, diff
+43 : 1561178, diff
+44 : 1561182, diff
+45 : 1561187, diff
+46 : 1561170, diff
+47 : 1561159, diff
+48 : 1561182, diff
+49 : 1561189, diff
+50 : 1561170, diff
+51 : 1561170, diff

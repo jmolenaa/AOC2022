@@ -16,10 +16,14 @@ void	add_valve_to_list(t_visited **list_visited, char *str)
 	*list_visited = new;
 }
 
-int	check_if_valid(t_valve *temp, t_visited *list_visited)
+int	check_if_valid(t_valve *temp, t_visited *list_visited, int stepsme, int stepsele, int check)
 {
 	t_visited *temporary = list_visited;
 
+	if (temp->flowrate < 15 && check == 1 && stepsme == 26)
+		return (1);
+	if (temp->flowrate < 15 && check == 0 && stepsele == 26)
+		return (1);
 	while (temporary != NULL)
 	{
 		if (ft_strncmp(temp->valvename, temporary->valvename, 2) == 0)
@@ -150,18 +154,13 @@ void	do_somthing(t_valve *first_valve,  t_valve *currentme, int stepsme, int *ma
 {
 	t_valve *temp;
 
-	// printf("steps and check %d %d, %d\n", stepsme, stepsele, check);
 	if (stepsme > 0 && check == 0)
 	{
-		// printf("\n before %d", pressure);
 		pressure = pressure + stepsme * currentme->flowrate;
-		// printf("after %d\n", pressure);
 	}
 	else if (stepsele > 0 && check == 1)
 	{
-		// printf("\n before %d", pressure);
 		pressure = pressure + stepsele * currentele->flowrate;
-		// printf("after %d\n", pressure);
 	}
 	else if (stepsme <= 0 && stepsele <= 0)
 	{
@@ -181,7 +180,7 @@ void	do_somthing(t_valve *first_valve,  t_valve *currentme, int stepsme, int *ma
 			temp = temp->next;		
 			continue ;
 		}
-		if (check_if_valid(temp, list_visited))
+		if (check_if_valid(temp, list_visited, stepsme, stepsele, check))
 		{
 			temp = temp->next;		
 			continue ;
