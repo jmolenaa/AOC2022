@@ -72,32 +72,30 @@ long long int calculate_value_from_back(long long int first, long long int secon
 	return (first / second);
 }
 
-long long int	get_value_from_back(int fd, char *monkeystr, long long int value_to_compare, char *monkey_to_compare, int check)
+long long int	get_value_from_back(int fd, char *monkeystr, int check)
 {
 	char	*first_monkey;
 	long long int	value_of_second_monkey;
 	if (ft_strncmp(monkeystr, "root", 4) == 0)
-		return (value_to_compare);
+	{
+		if (check == 0)
+			return (get_monkeys(find_monkey(fd, monkeystr + 13), fd));
+		return (get_monkeys(find_monkey(fd, monkeystr + 6), fd));
+	}
 	first_monkey = find_monkey_from_back(fd, monkeystr);
 	if (check == 0)
 		value_of_second_monkey = get_monkeys(find_monkey(fd, monkeystr + 13), fd);
 	else
 		value_of_second_monkey = get_monkeys(find_monkey(fd, monkeystr + 6), fd);
-	return (calculate_value_from_back(	get_value_from_back(fd, first_monkey, value_to_compare, monkey_to_compare, ft_strncmp(monkeystr, first_monkey + 6, 4))\
+	return (calculate_value_from_back(	get_value_from_back(fd, first_monkey, ft_strncmp(monkeystr, first_monkey + 6, 4))\
 										, value_of_second_monkey, *(monkeystr + 11), check));
 }
 
 int	main()
 {
-	int	fd = open("test", O_RDONLY);
-	char *rootstr = find_monkey(fd, "root");
+	int	fd = open("input", O_RDONLY);
 	long long int value_human;
-	long long int	value_of_first_monkey_of_root = get_monkeys(find_monkey(fd, rootstr + 6), fd);
-	long long int	value_of_second_monkey_of_root = get_monkeys(find_monkey(fd, rootstr + 13), fd);
 	char *humanstr = find_monkey_from_back(fd, "humn");
-	if (value_of_first_monkey_of_root == -1)
-		value_human = get_value_from_back(fd, humanstr, value_of_second_monkey_of_root, rootstr + 6, ft_strncmp(humanstr + 6, "humn", 4));
-	else
-		value_human = get_value_from_back(fd, humanstr, value_of_first_monkey_of_root, rootstr + 13, ft_strncmp(humanstr + 6, "humn", 4));
+	value_human = get_value_from_back(fd, humanstr, ft_strncmp(humanstr + 6, "humn", 4));
 	printf("%lld\n", value_human);
 }
