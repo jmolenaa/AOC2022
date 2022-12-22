@@ -13,9 +13,11 @@ void	get_grid(t_map *map, int fd)
 	for (int i = 0; i < map->maxy; i++)
 	{
 		*(map->grid + i) = ft_calloc(map->maxx + 1, sizeof(char));
+		ft_memset(*(map->grid + i), ' ', map->maxx);
 		str = get_next_line(fd);
 		strlen = ft_strlen(str);
-		ft_strlcpy(*(map->grid + i), str, strlen);
+		*(str + strlen - 1) = '\0';
+		ft_strcpynonull(*(map->grid + i), str);
 	}
 }
 
@@ -48,11 +50,13 @@ void	get_start_position(t_map *map)
 		map->positionx = x;
 	}
 	map->positionx++;
+	map->previous_positionx = map->positionx;
+	map->previous_positiony = map->positiony;
 }
 
 t_map	*get_map(void)
 {
-	int	fd = open("test", O_RDONLY);
+	int	fd = open("input", O_RDONLY);
 	t_map	*map = malloc(sizeof(t_map));
 	map->direction = 0;
 	map->maxx = 0;
@@ -63,8 +67,27 @@ t_map	*get_map(void)
 	get_start_position(map);
 	// ft_print_grid(map->grid);
 	// printf("%d, %d\n", map->maxx, map->maxy);
+	// printf("\n");
 	// printf("%s\n", map->instructions);
 	// printf("%d, %d\n", map->positionx, map->positiony);
 	close(fd);
 	return (map);
+}
+
+t_sides	*get_sides(t_map *map)
+{
+	t_sides *sides;
+	if (map->maxy > map->maxx)
+		sides = get_cube_y(map);
+	// else
+	// {
+	// 	sides = get_top_x(map);
+	// 	get_front_x(map, sides);
+	// 	get_bottom_x(map, sides);
+	// 	get_back_x(map, sides);
+	// 	get_left_x(map, sides);
+	// 	get_right_x(map,sides);
+	// }
+	
+	return (sides);
 }
