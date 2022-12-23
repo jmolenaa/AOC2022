@@ -14,6 +14,24 @@ void	print_elves(t_elf *elves)
 	}
 }
 
+void	print_proposed(t_elf *elves)
+{
+	while (elves != NULL)
+	{
+		printf("elf\ncoordinates : %d, %d\nproposed coordinates : %d, %d\n\n", elves->x_coordinate, elves->y_coordinate, elves->x_proposed, elves->y_proposed);
+		elves = elves->next_elf;
+	}
+}
+
+void	print_adjacent(t_adjacent *adjacent_elves)
+{
+	while (adjacent_elves != NULL)
+	{
+		printf("coordinates : %d, %d\n", adjacent_elves->x, adjacent_elves->y);
+		adjacent_elves = adjacent_elves->next;
+	}
+}
+
 t_elf	*make_new_elf(int x, int y)
 {
 	t_elf	*elf = malloc(sizeof(t_elf));
