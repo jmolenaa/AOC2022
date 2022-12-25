@@ -26,60 +26,33 @@ long long int	SNAFU_to_decimal_converter(char *str)
 	return (number);
 }
 
-char	*convert_to_base_five(long long int num)
+int	convert_digit(char digit, long long int *num)
 {
-	char	*str = ft_calloc(30, 1);
+	digit = *num % 5 + 48;
+	*num = *num / 5;
+	if (digit > '2')
+	{
+		if (digit == '3')
+			digit = '=';
+		else
+			digit = '-';
+		*num = *num + 1;
+	}
+	return (digit);
+}
+
+int	test(long long int num, char *str)
+{
 	char	digit;
+	int	i = 0;
 	if (num > 0)
 	{
-		digit = num % 5 + 48;
-		num = num /5;
-		str = convert_to_base_five(num);
-		for(int i = 0; 1; i++)
-		{
-			if (*(str + i) == '\0')
-			{
-				*(str + i) = digit;
-				break ;
-			}
-		}
+		digit = convert_digit(digit, &num);
+		i = test(num, str);
+		*(str + i) = digit;
+		i++;
 	}
-	return (str);
-}
-
-char	convert(char c)
-{
-	if (c == '3')
-		return ('=');
-	if (c == '4')
-		return ('-');
-	if (c == '5')
-		return ('0');
-	return (c);
-}
-
-char	*decimal_to_SNAFU_converter(long long int num)
-{
-	char	*str = convert_to_base_five(num);
-	int		strlen = ft_strlen(str);
-	int		check;
-	while (strlen > 0)
-	{
-		check = 0;
-		if (*(str + strlen - 1) > '2')
-		{
-			*(str + strlen - 1) = convert(*(str + strlen - 1));
-			*(str + strlen - 2) = *(str + strlen - 2) + 1;
-			check = 1;
-		}
-		*(str + strlen) = *(str + strlen - 1);
-		if (strlen == 1 && check == 1)
-				*(str + strlen - 1) = '1';
-		else if (strlen == 1)
-			*(str + strlen - 1) = ' ';
-		strlen--;
-	}
-	return (str);
+	return (i);
 }
 
 long long int	get_sum(void)
@@ -98,7 +71,8 @@ long long int	get_sum(void)
 int	main()
 {
 	long long int	sum;
+	char	*str = ft_calloc(30, 1);
 	sum = get_sum();
-	char *str = decimal_to_SNAFU_converter(sum);
+	test(sum, str);
 	printf("%s\n", str);
 }
