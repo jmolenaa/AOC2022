@@ -1,5 +1,5 @@
 # adventofcode 2022
-Solutions for advent of code
+Solutions for [advent of code](https://adventofcode.com/)
 
 Just compile one of the C files (later days have them conveniently named after the first or second part), the libft library and the parsing.c file(if there is one).  
 Also there is like 2 or 3 days with a utils file you're gonna have to compile as well.  
