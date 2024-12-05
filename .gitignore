@@ -6,3 +6,4 @@ file
 .vscode
 libft/libft.a
 .DS_Store
+*input
